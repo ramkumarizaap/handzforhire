@@ -35,7 +35,7 @@ class Jobs extends Admin_controller
     $this->load->library('listing');
     $this->simple_search_fields = array('a.job_name' => 'Job Name','b.name'=>'Category','a.job_date'=>'Job Date','a.address'=>'Address');
     // $this->_narrow_search_conditions = array("start_date");
-    $str = '<a href="'.site_url('jobs/add_job/{id}').'" class="btn btn yellow table-action"><i class="fa fa-edit edit"></i></a><a href="javascript:void(0);" data-original-title="Remove" data-toggle="tooltip" data-placement="top" class="table-action btn red" onclick="delete_record(\'jobs/delete/{id}\',this);"><i class="fa fa-trash-o trash"></i></a>';
+    $str = '<a href="'.site_url('jobs/add_job/{id}').'" class="btn btn btn-padding yellow table-action"><i class="fa fa-edit edit"></i></a><a href="javascript:void(0);" data-original-title="Remove" data-toggle="tooltip" data-placement="top" class="table-action btn-padding btn red" onclick="delete_record(\'jobs/delete/{id}\',this);"><i class="fa fa-trash-o trash"></i></a>';
     $this->listing->initialize(array('listing_action' => $str));
     $listing = $this->listing->get_listings('jobs_model', 'job_listing');
     if($this->input->is_ajax_request())
@@ -117,7 +117,7 @@ class Jobs extends Admin_controller
     $this->load->library('listing');
     $this->simple_search_fields = array('name' => 'Name');
     // $this->_narrow_search_conditions = array("start_date");
-    $str = '<a href="'.site_url('jobs/add_category/{id}').'" class="btn btn yellow table-action"><i class="fa fa-edit edit"></i></a><a href="javascript:void(0);" data-original-title="Remove" data-toggle="tooltip" data-placement="top" class="table-action btn red" onclick="delete_record(\'jobs/delete/{id}\',this);"><i class="fa fa-trash-o trash"></i></a>';
+    $str = '<a href="'.site_url('jobs/add_category/{id}').'" class="btn btn-padding btn yellow table-action"><i class="fa fa-edit edit"></i></a><a href="javascript:void(0);" data-original-title="Remove" data-toggle="tooltip" data-placement="top" class="table-action btn red btn-padding" onclick="delete_record(\'jobs/delete/{id}\',this);"><i class="fa fa-trash-o trash"></i></a>';
     $this->listing->initialize(array('listing_action' => $str));
     $listing = $this->listing->get_listings('jobs_model', 'listing');
     if($this->input->is_ajax_request())
