@@ -482,5 +482,14 @@ function get_job_category()
   return $q;
 }
 
+function get_dashboard_counts($table='',$where='')
+{
+  $CI = get_instance();
+  if($where)
+    $where = "where $where";
+  $q = $CI->db->query("select count(id) as count from $table $where")->row_array();
+  return $q['count'];
+}
+
 
 ?>

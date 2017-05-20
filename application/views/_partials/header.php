@@ -74,25 +74,19 @@
           <?=($uri=='dashboard')?"<span class='selected'>":"";?>
           </a>
         </li>
-        <li class="start <?=($uri=='user')?'active':'';?>">
-          <a href="<?=site_url('dashboard');?>">
+        <li class="start <?=($uri1=='employers' || $uri1=='add_employer')?'active':'';?>">
+          <a href="<?=site_url('user/employers');?>">
           <i class="fa fa-user"></i>
-          <span class="title">Users</span>
-            <?=($uri=='user')?"<span class='selected'>":"";?>
-            <span class="arrow "></span>
+          <span class="title">Employers</span>
+            <?=($uri=='user/employers')?"<span class='selected'>":"";?>
           </a>
-          <ul class="sub-menu">
-            <li class="<?=($uri1=='employers' || $uri1=='add_employer')?'active':'';?>">
-              <a href="<?=site_url('user/employers');?>">
-              <i class="fa fa-user"></i>
-              Employers</a>
-            </li>
-            <li class="<?=($uri1=='employees' || $uri1=='add_employee')?'active':'';?>">
-              <a href="<?=site_url('user/employees');?>">
-              <i class="fa fa-users"></i>
-              Employees</a>
-            </li>
-          </ul>
+        </li>
+        <li class="start <?=($uri1=='employees' || $uri1=='add_employee')?'active':'';?>">
+          <a href="<?=site_url('user/employees');?>">
+          <i class="fa fa-user-plus"></i>
+          <span class="title">Employees</span>
+            <?=($uri=='user/employees')?"<span class='selected'>":"";?>
+          </a>
         </li>
         <li class="start <?=($uri=='jobs')?'active':'';?>">
           <a href="<?=site_url('jobs');?>">
