@@ -64,5 +64,34 @@ class Login_model extends App_model
     $this->db->where($where);
     $this->db->delete($table);
   }
+  
+   public function app_login($email, $password)
+   {
+      $user = $this->get_by_user($email,"email");   
+      if(empty($user) && count($user) == 0){
+        $user = $this->get_by_user($email,'username');
+      }
+      $pass = md5($password);
+      if(!empty($user)&& $user['password'] == $pass){
+        return $user;
+      }
+      return false;
+   }
+   
+   
+   public function get_by_user($email,$type)
+   {
+        $this->db->select("*");
+        $this->db->from("user");
+        if($type == 'email'){
+          $this->db->where(array('email' => $email));
+        }
+        else
+        {
+            $this->db->where(array('username' => $email));
+        }
+        return $this->db->get()->row_array();
+       
+   }
 }
 ?>

@@ -72,5 +72,12 @@ class User_model extends App_model
     $this->db->where($where);
     $this->db->delete($table);
   }
+  
+   function check_unique($where)
+    {
+        $this->db->select("*");
+        $this->db->where($where);
+        return $this->db->get($this->_table)->row_array();
+    }
 }
 ?>
