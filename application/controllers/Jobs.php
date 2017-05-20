@@ -14,8 +14,8 @@ class Jobs extends Admin_controller
 			           array('field' => 'job_date', 'label' => 'Job Date', 'rules' => 'trim|required'),
 			           array('field' => 'start_time', 'label' => 'Start Time', 'rules' => 'trim|required'),
 			           array('field' => 'end_time', 'label' => 'End Time', 'rules' => 'trim|required'),
-			           array('field' => 'amount', 'label' => 'Amount', 'rules' => 'trim|required'),
-			           array('field' => 'recurring', 'label' => 'Recurring', 'rules' => 'trim|required'),
+			           array('field' => 'amount', 'label' => 'Amount', 'rules' => 'trim|required|integer'),
+			           array('field' => 'recurring', 'label' => 'Payment Type', 'rules' => 'trim|required'),
 			           array('field' => 'address', 'label' => 'Address', 'rules' => 'trim|required'),
 			           array('field' => 'address_include', 'label' => 'Include Post', 'rules' => 'trim|required'),
 			           array('field' => 'logo', 'label' => 'Logo', 'rules' => 'trim|required'),);
@@ -94,14 +94,10 @@ class Jobs extends Admin_controller
 
   public function posted_jobs()
   {
-
-  	$this->layout->add_javascripts(array('listing'));
+    $this->layout->add_javascripts(array('listing'));
     $this->load->library('listing');
-    $this->simple_search_fields = array('a.job_name' => 'Job Name','b.name'=>'Category','a.job_date'=>'Job Date','a.address'=>'Address');
-    // $this->_narrow_search_conditions = array("start_date");
-    $str = '<a href="'.site_url('jobs/add_job/{id}').'" class="btn btn yellow table-action"><i class="fa fa-edit edit"></i></a><a href="javascript:void(0);" data-original-title="Remove" data-toggle="tooltip" data-placement="top" class="table-action btn red" onclick="delete_record(\'jobs/delete/{id}\',this);"><i class="fa fa-trash-o trash"></i></a>';
-    $this->listing->initialize(array('listing_action' => $str));
-    $listing = $this->listing->get_listings('jobs_model', 'job_listing');
+    $this->simple_search_fields = array('b.employer_id' => 'Employer','b.firstname'=>'Employee','a.job_posted_on'=>'Job Posted On','c.job_name'=>'Job Name');
+    $listing = $this->listing->get_listings('jobs_model', 'posted_jobs','no');
     if($this->input->is_ajax_request())
       $this->_ajax_output(array('listing' => $listing), TRUE);
     $this->data['bulk_actions'] = array('' => 'select', 'delete' => 'Delete');

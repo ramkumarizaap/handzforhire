@@ -27,19 +27,16 @@ $uri = $this->uri->segment(2);?>
 		<table class="table table-striped table-hover tableSite table-bordered" id="data_table">
 			<thead>
 				<tr>
-
 				<!-- <th> # </th> -->
 				<?php  $cols = 0; 
-
 				foreach ($fields as $field => $values):$cols++;?>
 
 				<?php if($values['default_view'] == '0') continue; ?>
 				<th>
-				<input type="hidden" value="<?php echo $base_url.$cur_page.'/'.$field.'/';?><?php echo Listing::reverse_direction($direction); ?>"> 
-	
-				<a href="<?php echo $base_url.$cur_page.'/'.$field.'/';?>
-                   <?php echo Listing::reverse_direction($direction); ?>" data-original-title="Click to sort" data-toggle="tooltip" data-placement="top" title="Click to sort">
+				<input type="hidden" value="<?php echo $base_url.$cur_page.'/'.$field.'/';?><?php echo Listing::reverse_direction($direction); ?>">	
+				<a href="<?php echo $base_url.$cur_page.'/'.$field.'/';?><?php echo Listing::reverse_direction($direction); ?>" data-original-title="Click to sort" data-toggle="tooltip" data-placement="top" title="Click to sort" style="display: block;">
 					<?php echo $values['name'];?> 
+					<span class="fa fa-sort pull-right"></span>
 				</a>
 				
 				<?php if(strcmp($order,$field) === 0): $arrow_icon = (strcmp($direction, 'ASC') === 0)?'up_sort':'down_sort';?>
@@ -61,9 +58,9 @@ $uri = $this->uri->segment(2);?>
 				</th>
 
 				<?php endforeach;?>
-
+				<?php if($action != 'no' || $action=='') { ?>
 					<th>Action</th>
-
+				<?php }?>
 				
 			</tr>
 		</thead>
@@ -99,7 +96,7 @@ $uri = $this->uri->segment(2);?>
                 
 				<?php endforeach;?>
 
-	          
+	      <?php if($action != 'no' || $action=='') { ?>
 				<td>
 					<?php if(strcmp($listing_action, '') === 0):?>
 					<a class="btn btn-small" href="<?php echo site_url($this->uri->segment(1, 'index')."/view/". $item['id']);?>"
@@ -112,6 +109,7 @@ $uri = $this->uri->segment(2);?>
 						?>
 					<?php endif;?>
 				</td>
+				<?php }?>
 			</tr>
             
     	<?php endforeach; ?>

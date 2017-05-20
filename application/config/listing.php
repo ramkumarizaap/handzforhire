@@ -89,15 +89,15 @@ $config['jobs_job_list'] = array(
 $config['jobs_posted_jobs'] = array(
 	"view"		=> 	'listing/listing',
 	"init_scripts" => 'listing/init_scripts',
-	"advance_search_view" => 'frontend/jobs/job_list',
-	"base_url"	=> 	'/jobs/job_list/',
+	"advance_search_view" => 'frontend/jobs/posted_jobs',
+	"base_url"	=> 	'/jobs/posted_jobs/',
 	"per_page"	=>	"20",
 	"fields"	=> array(   
-						'job_name'=>array('name'=>'Name', 'data_type' => 'String', 'sortable' => FALSE, 'default_view'=>1),					
-						'job_category'=>array('name'=>'Category', 'data_type' => 'String', 'sortable' => FALSE, 'default_view'=>1),
-						'job_date'=>array('name'=>'Job Date', 'data_type' => 'date', 'sortable' => FALSE, 'default_view'=>1),
-						'amount'=>array('name'=>'Amount', 'data_type' => 'money', 'sortable' => FALSE, 'default_view'=>1),
-						'address'=>array('name'=>'Address', 'data_type' => 'string', 'sortable' => FALSE, 'default_view'=>1)),
-	"default_order"	=> "id",
-	"default_direction" => "DESC"
+						'employer'=>array('name'=>'Employer', 'data_type' => 'String', 'sortable' => FALSE, 'default_view'=>1),
+						'employee'=>array('name'=>'Employee', 'data_type' => 'String', 'sortable' => FALSE, 'default_view'=>1),
+						'job_name'=>array('name'=>'Job Name', 'data_type' => 'String', 'sortable' => FALSE, 'default_view'=>1),
+						'job_posted_on'=>array('name'=>'Jobs Posted On', 'data_type' => 'datetime', 'sortable' => FALSE, 'default_view'=>1),
+						),
+	"default_order"	=> "a.id",
+	"default_direction" => "DESC",
 );

@@ -191,7 +191,7 @@ class Listing
     	return $data;
     }
 
-    function get_listings($model = null, $method = null)
+    function get_listings($model = null, $method = null,$action = null)
     {  
     	if(is_null($model) || is_null($method))
     		return FALSE;
@@ -257,7 +257,7 @@ class Listing
     	
     	
     	//perform the search function and return back the listing view with data
-    	return $this->render( array($this->_CI->$model, $method), $criteria, array('fields' => $listing_fields, 'model' => $model, 'method' => $method));
+    	return $this->render( array($this->_CI->$model, $method), $criteria, array('fields' => $listing_fields, 'model' => $model, 'method' => $method,'action'=>$action));
     	
     }
     
