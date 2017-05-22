@@ -1,0 +1,10 @@
+[15-May-2017 02:00:05 America/Denver] PHP Parse error:  syntax error, unexpected 'exit' (T_EXIT), expecting ',' or ';' in /home/izaapinn/public_html/handzforhire/application/models/Login_model.php on line 14
+[16-May-2017 01:49:57 America/Denver] PHP Fatal error:  Call to a member function insert() on null in /home/izaapinn/public_html/handzforhire/application/controllers/Service.php on line 193
+[16-May-2017 01:50:46 America/Denver] PHP Fatal error:  Call to a member function insert() on null in /home/izaapinn/public_html/handzforhire/application/controllers/Service.php on line 193
+[16-May-2017 01:50:55 America/Denver] PHP Fatal error:  Call to a member function insert() on null in /home/izaapinn/public_html/handzforhire/application/controllers/Service.php on line 193
+[16-May-2017 01:51:54 America/Denver] PHP Fatal error:  Call to a member function insert() on null in /home/izaapinn/public_html/handzforhire/application/controllers/Service.php on line 193
+[16-May-2017 01:52:18 America/Denver] PHP Fatal error:  Call to a member function insert() on null in /home/izaapinn/public_html/handzforhire/application/controllers/Service.php on line 193
+[16-May-2017 02:30:31 America/Denver] PHP Fatal error:  Call to a member function insert() on null in /home/izaapinn/public_html/handzforhire/application/controllers/Service.php on line 193
+[16-May-2017 02:59:10 America/Denver] PHP Fatal error:  Call to a member function insert() on null in /home/izaapinn/public_html/handzforhire/application/controllers/Service.php on line 193
+[16-May-2017 03:18:12 America/Denver] PHP Fatal error:  Call to a member function insert() on null in /home/izaapinn/public_html/handzforhire/application/controllers/Service.php on line 193
+[16-May-2017 03:20:36 America/Denver] PHP Fatal error:  Call to a member function insert() on null in /home/izaapinn/public_html/handzforhire/application/controllers/Service.php on line 193

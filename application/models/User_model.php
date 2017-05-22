@@ -65,6 +65,7 @@ class User_model extends App_model
   {
     $this->db->where($where);
     $this->db->update($table,$data);
+    return $this->db->affected_rows();
   }
 
   public function delete($where,$table)
@@ -77,7 +78,7 @@ class User_model extends App_model
     {
         $this->db->select("*");
         $this->db->where($where);
-        return $this->db->get($this->_table)->row_array();
+        return $this->db->get("user")->row_array();
     }
 }
 ?>

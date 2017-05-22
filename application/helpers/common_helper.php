@@ -157,7 +157,7 @@ function displayData($data = null, $type = 'string', $row = array(), $wrap_tag_o
           $data = "<h2 style='font-size:14px;' class='label label-danger'>".$data."</h2>"; 
         break;
         case 'status':
-           $labels_array = array('Active' => 'label-success','Not Active' => 'label-danger','Inactive' => 'label-danger');
+           $labels_array = array('Active' => 'label-success','Not Active' => 'label-danger');
            $data = "<span class='label {$labels_array[$data]}'>{$data}</span>";
           break;
         case 'product_name_link':
@@ -482,14 +482,11 @@ function get_job_category()
   return $q;
 }
 
-function get_dashboard_counts($table='',$where='')
+function get_current_user_dt($user_id)
 {
   $CI = get_instance();
-  if($where)
-    $where = "where $where";
-  $q = $CI->db->query("select count(id) as count from $table $where")->row_array();
-  return $q['count'];
+  $q = $CI->db->query("select * from user where id='$user_id'")->row_array();
+  return $q;
 }
-
 
 ?>

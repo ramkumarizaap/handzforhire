@@ -138,8 +138,8 @@
 									<div class="form-group">
 										<label class="col-md-3 control-label">Would you like to include your address in this post?</label>
 										<div class="col-md-9 <?=(form_error('address_include'))?'has-error':'';?>">
-											<label class="col-md-2"><input type="radio" <?=($edit['address_include']=="Yes")?"checked":"";?> name="address_include" value="Yes">Yes</label>
-											<label><input type="radio" <?=($edit['address_include']=="No")?"checked":"";?> name="address_include" value="No">No</label>
+											<input type="radio" <?=($edit['address_include']=="Yes")?"checked":"";?> name="address_include" value="Yes">Yes
+											<input type="radio" <?=($edit['address_include']=="No")?"checked":"";?> name="address_include" value="No">No
 										</div>
 										<?php if(form_error('address_include')){?>
 												<span class="help-block error red"><?=form_error('address_include');?></span>

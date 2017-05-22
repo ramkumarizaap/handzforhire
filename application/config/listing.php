@@ -101,18 +101,3 @@ $config['jobs_posted_jobs'] = array(
 	"default_order"	=> "a.id",
 	"default_direction" => "DESC",
 );
-
-
-$config['roles_index'] = array(
-	"view"		=> 	'listing/listing',
-	"init_scripts" => 'listing/init_scripts',
-	"advance_search_view" => 'frontend/roles/index',
-	"base_url"	=> 	'/roles/index/',
-	"per_page"	=>	"20",
-	"fields"	=> array(   
-						'role'=>array('name'=>'Role Name', 'data_type' => 'String', 'sortable' => FALSE, 'default_view'=>1),
-						'status'=>array('name'=>'Status', 'data_type' => 'status', 'sortable' => FALSE, 'default_view'=>1),
-						),
-	"default_order"	=> "id",
-	"default_direction" => "DESC",
-);
