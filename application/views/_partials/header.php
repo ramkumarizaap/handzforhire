@@ -113,6 +113,13 @@
             </li>
           </ul>
         </li>
+        <li class="start <?=($uri=='roles')?'active':'';?>">
+          <a href="<?=site_url('roles');?>">
+          <i class="fa fa-sitemap"></i>
+          <span class="title">Roles</span>
+            <?=($uri=='roles')?"<span class='selected'>":"";?>
+          </a>
+        </li>
         <!-- <li class="start <?=($uri=='reports')?'active':'';?>">
           <a href="<?=site_url('reports');?>">
           <i class="fa fa-table"></i>

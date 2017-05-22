@@ -157,7 +157,7 @@ function displayData($data = null, $type = 'string', $row = array(), $wrap_tag_o
           $data = "<h2 style='font-size:14px;' class='label label-danger'>".$data."</h2>"; 
         break;
         case 'status':
-           $labels_array = array('Active' => 'label-success','Not Active' => 'label-danger');
+           $labels_array = array('Active' => 'label-success','Not Active' => 'label-danger','Inactive' => 'label-danger');
            $data = "<span class='label {$labels_array[$data]}'>{$data}</span>";
           break;
         case 'product_name_link':
