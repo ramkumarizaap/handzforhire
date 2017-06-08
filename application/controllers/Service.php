@@ -42,13 +42,22 @@ class Service extends REST_Controller
             $usertype       = $this->post('usertype');
             $devicetoken    = $this->post('devicetoken');
             
+             if(!empty($username)) {
+                  //username check if already exists or not
+                  $user_res = $this->user_model->check_unique(array("username" => $username));
+                  if(count($user_res)>0) {
+                    return $this->response(array('status' => "error",'msg' => 'Username already in use.','error_code' => 2), 404);
+                  }
+             } 
+             
              if(!empty($email)) {
                   //Email check if already exists or not
                   $email_res = $this->user_model->check_unique(array("email" => $email));
                   if(count($email_res)>0) {
                     return $this->response(array('status' => "error",'msg' => 'Email already exist.','error_code' => 2), 404);
                   }
-             } 
+             }
+             
             
             $ins_data = array();
             $ins_data['username']       = $username;
@@ -197,7 +206,7 @@ class Service extends REST_Controller
             
             $user_id   = $this->post('user_id');
             $res       = $this->user_model->check_unique(array('id' => $user_id));
-            //print_r($res); exit;
+            
             if(count($res)>0){
                 return $this->response(array('status' =>'success','request_type' => 'get_user_email','email' => $res['email']), 200);
             }
@@ -229,7 +238,7 @@ class Service extends REST_Controller
         //add credit card
         function add_credit_card_post()
         {
-            if(!$this->post('user_id')){
+            if(!$this->post('name')){
     			return $this->response(array('status' => 'error','msg' => 'Required fields missing in your request','error_code' => 1), 404);
     		} 
             
@@ -391,6 +400,31 @@ class Service extends REST_Controller
             else
             {
                 return $this->response(array('status' =>'error','request_type' => 'employer_card_lists', 'msg' => "No Cards Found!" ,'error_code' => 7), 404);
+            }
+        }
+        
+       //update profile image & profile name  
+        function update_profile_image_post()
+        {
+            if(!$this->post('user_id')){
+    			return $this->response(array('status' => 'error','msg' => 'Required fields missing in your request','error_code' => 1), 404);
+    		}
+            
+            $profile_image = $this->post('profile_image');
+            $profile_name  = $this->post('profile_name');
+            $user_id       = $this->post("user_id"); 
+            $res           = $this->user_model->check_unique(array('id' => $user_id));
+            
+            if(count($res)>0){
+                 $ins_data   = array();
+                 $ins_data['profile_image'] = $profile_image;
+                 $ins_data['profile_name']  = $profile_name; 
+                 $update = $this->user_model->update(array("id" => $res['id']),$ins_data,"user");
+                 return $this->response(array('status' =>'success','request_type' => 'update_profile_section'), 200);
+            }
+            else
+            {
+                return $this->response(array('status' =>'error','request_type' => 'update_profile_section', 'msg' => "Profile image doesn't update" ,'error_code' => 7), 404);
             }
         }
 }
