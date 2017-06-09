@@ -276,7 +276,7 @@ class Service extends REST_Controller
             $ins_data['zipcode']     = $zipcode;
             $ins_data['employer_id'] = $employer_id;
             $ins_data['default_card']= $default_card;
-            
+            $ins_data['created_date']= date("Y-m-d H:i:s");
             $card_id                 = $this->credit_card_model->insert($ins_data);
             if(!empty($card_id)){
                 return $this->response(array('status' =>'success','request_type' => 'add_credit_card','card_id' => $card_id), 200);
@@ -287,7 +287,7 @@ class Service extends REST_Controller
             }
         }
         
-        //user email update
+        //user credit card update
         function credit_card_update_post() {
             
             if(!$this->post('card_id') && !$this->post('card_number')){
@@ -332,9 +332,7 @@ class Service extends REST_Controller
                     return $this->response(array('status' => "error",'msg' => 'Card number already exist.','error_code' => 2), 404);
                   }
              } 
-            
-            $ins_data                 = array();
-            $ins_data['card_number']  = $card_number;  
+            $ins_data['updated_date'] = date("Y-m-d H:i:s");
             $affected                 = $this->credit_card_model->update(array("id" => $card_id),$ins_data);
             
             if(!empty($affected)){   
@@ -428,5 +426,135 @@ class Service extends REST_Controller
                 return $this->response(array('status' =>'error','request_type' => 'update_profile_section', 'msg' => "Profile image doesn't update" ,'error_code' => 7), 404);
             }
         }
+        
+        //add checking account data
+        function add_checking_account_post()
+        {
+            if(!$this->post('name')){
+    			return $this->response(array('status' => 'error','msg' => 'Required fields missing in your request','error_code' => 1), 404);
+    		} 
+            
+            $name           = $this->post('name');
+            $routing_number = $this->post('routing_number');
+            $account_number = $this->post('account_number');
+            $license_number = $this->post('license_number');
+            $employer_id    = $this->post('employer_id');
+            $default_account= $this->post('default_account');
+            $state          = $this->post('state');
+            //$check_accot_id = $this->post('checking_account_id');
+            $status         = $this->post('status');
+            
+             if(!empty($account_number)) {
+                  //Account number check if already exists or not
+                  $account_res = $this->checking_account_model->check_unique(array("account_number" => $account_number));
+                  if(count($account_res)>0) {
+                    return $this->response(array('status' => "error",'msg' => 'Account number already exists.','error_code' => 2), 404);
+                  }
+             }
+            
+            $ins_data = array();
+            $ins_data['name']           = $name;
+            $ins_data['routing_number'] = $routing_number;
+            $ins_data['account_number'] = $account_number;
+            $ins_data['license_number'] = $license_number;
+            $ins_data['state']          = $state;
+            $ins_data['status']         = $status;
+            $ins_data['employer_id']    = $employer_id;
+            $ins_data['default_account']= $default_account;
+            $ins_data['created_date']   = date("Y-m-d H:i:s");
+            
+            $checking_account_id        = $this->checking_account_model->insert($ins_data);
+            if(!empty($checking_account_id)){
+                return $this->response(array('status' =>'success','request_type' => 'add_checking_account','checking_account_id' => $checking_account_id), 200);
+            }    
+            else
+            {
+                return $this->response(array('status' =>'error','request_type' => 'add_checking_account', 'msg' => "Checking Account details doesn't create!" ,'error_code' => 5), 404);
+            }
+        }
+        
+        //user checking account update
+        function checking_account_update_post() {
+            
+                if(!$this->post('checking_account_id') && !$this->post('account_number')){
+        			return $this->response(array('status' => 'error','msg' => 'Required fields missing in your request','error_code' => 1), 404);
+        		}
+                 
+                $name           = $this->post('name');
+                $routing_number = $this->post('routing_number');
+                $account_number = $this->post('account_number');
+                $license_number = $this->post('license_number');
+                $default_account= $this->post('default_account');
+                $employer_id    = $this->post('employer_id');
+                $state          = $this->post('state');
+                $status         = $this->post('status');
+                $check_accot_id = $this->post('checking_account_id');
+                
+                //get account details
+                $cd_res = $this->checking_account_model->check_unique(array('id' => $check_accot_id));
+                
+                $ins_data = array();
+                $ins_data['name']           = (!empty($name))?$name:$cd_res['name'];
+                $ins_data['routing_number'] = (!empty($routing_number))?$routing_number:$cd_res['routing_number'];
+                $ins_data['account_number'] = (!empty($account_number))?$account_number:$cd_res['account_number'];
+                $ins_data['license_number'] = (!empty($license_number))?$license_number:$cd_res['license_number'];
+                $ins_data['state']          = (!empty($state))?$state:$cd_res['state'];
+                $ins_data['status']         = (!empty($status))?$status:$cd_res['status'];
+                $ins_data['employer_id']    = (!empty($employer_id))?$employer_id:$cd_res['employer_id'];
+                $ins_data['default_account']= (!empty($default_account))?$default_account:$cd_res['default_account'];
+                
+                
+           
+             if(!empty($account_number)) {
+                  //Account number check if already exists or not
+                  $acc_res = $this->checking_account_model->check_unique(array("account_number" => $account_number, 'id!=' => $check_accot_id));
+                  if(count($acc_res)>0) {
+                    return $this->response(array('status' => "error",'msg' => 'Account number already exist.','error_code' => 2), 404);
+                  }
+             } 
+            $ins_data['updated_date']   = date("Y-m-d H:i:s");
+            $affected  = $this->checking_account_model->update(array("id" => $check_accot_id),$ins_data);
+            
+            if(!empty($affected)){   
+                $res = $this->checking_account_model->check_unique(array('id' => $check_accot_id));
+                return $this->response(array('status' =>'success','request_type' => 'update_credit_card_details','account_data' => $res), 200);
+            }
+            else
+            {
+                return $this->response(array('status' =>'error','request_type' => 'update_credit_card_details', 'msg' => "Account doesn't updated", 'error_code' => 3), 404);
+            } 
+        }
+        
+         //view checking account by through checking account id
+        function view_checking_account_post()
+        {
+            if(!$this->post('checking_account_id')){
+    			return $this->response(array('status' => 'error','msg' => 'Required fields missing in your request','error_code' => 1), 404);
+    		}
+            $checking_account_id   = $this->post('checking_account_id');
+            
+            //Get checking account data
+            $check_res  = $this->checking_account_model->check_unique(array('id' => $checking_account_id));
+            
+            if(count($check_res)>0){
+                 return $this->response(array('status' =>'success','request_type' => 'view_checking_account', 'checking_data' => $check_res), 200);
+            }
+            else
+            {
+                return $this->response(array('status' =>'error','request_type' => 'view_checking_account', 'msg' => "Checking Account doesn't exists!" ,'error_code' => 6), 404);
+            }
+        } 
+        
+        //Delete Checking Account details
+        function delete_checking_account_post()
+        {
+            if(!$this->post('checking_account_id')){
+    			return $this->response(array('status' => 'error','msg' => 'Required fields missing in your request','error_code' => 1), 404);
+    		}
+            
+            $checking_account_id   = $this->post('checking_account_id');
+            $res                   = $this->checking_account_model->delete(array('id' => $checking_account_id));
+            return $this->response(array('status' =>'success','request_type' => 'delete_checking_account', 'card_id' => $checking_account_id), 200);
+        } 
 }
 ?>
