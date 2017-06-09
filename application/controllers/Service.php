@@ -393,9 +393,10 @@ class Service extends REST_Controller
             
             $card_res   = array();
             $card_res   = $this->credit_card_model->get_employer_cards(array('c.employer_id' => $employer_id));
+            $check_res  = $this->checking_account_model->get_checking_account_data(array('c.employer_id' => $employer_id));
             
             if(count($card_res)>0){
-                 return $this->response(array('status' =>'success','request_type' => 'employer_card_lists', 'card_data' => $card_res), 200);
+                 return $this->response(array('status' =>'success','request_type' => 'employer_card_lists', 'card_data' => $card_res, 'checking_account_data' => $check_res), 200);
             }
             else
             {

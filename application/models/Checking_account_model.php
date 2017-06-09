@@ -1,11 +1,11 @@
 <?php  if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Credit_card_model extends CI_model {
+class Checking_account_model extends CI_model {
     
     function __construct()
     {
         parent::__construct();
-        $this->_table = 'credit_card';
+        $this->_table = 'checking_account';
     }
    
     public function insert($data)
@@ -33,11 +33,11 @@ class Credit_card_model extends CI_model {
         return $this->db->get($this->_table)->row_array();
     }
     
-    function get_employer_cards($where)
+    function get_checking_account_data($where)
     {
         $this->db->select("c.*,u.firstname,u.lastname");
         $this->db->join("user u","u.id=c.employer_id");
-        $this->db->from("credit_card c");
+        $this->db->from("checking_account c");
         $this->db->where($where);
         return $this->db->get()->result_array();
         
