@@ -27,7 +27,7 @@ class Service extends REST_Controller
          function user_register_post() {
             
             if(!$this->post('email')){
-    			return $this->response(array('status' => 'error','msg' => 'Required fields missing in your request','error_code' => 1), 404);
+    			return $this->response(array('status' => 'error','msg' => 'Required fields missing in your request','error_code' => "1"), 404);
     		}
              
             $username       = $this->post('username');
@@ -46,17 +46,17 @@ class Service extends REST_Controller
                   //username check if already exists or not
                   $user_res = $this->user_model->check_unique(array("username" => $username));
                   if(count($user_res)>0) {
-                    return $this->response(array('status' => "error",'msg' => 'Username already in use.','error_code' => 2), 404);
+                    return $this->response(array('status' => "error",'msg' => 'Username already in use.','error_code' => "2"), 404);
                   }
              } 
              
-             if(!empty($email)) {
-                  //Email check if already exists or not
-                  $email_res = $this->user_model->check_unique(array("email" => $email));
-                  if(count($email_res)>0) {
-                    return $this->response(array('status' => "error",'msg' => 'Email already exist.','error_code' => 2), 404);
-                  }
-             }
+             //if(!empty($email)) {
+//                  //Email check if already exists or not
+//                  $email_res = $this->user_model->check_unique(array("email" => $email));
+//                  if(count($email_res)>0) {
+//                    return $this->response(array('status' => "error",'msg' => 'Email already exists.','error_code' => 2), 404);
+//                  }
+//             }
              
             
             $ins_data = array();
@@ -79,15 +79,33 @@ class Service extends REST_Controller
             }    
             else
             {
-                return $this->response(array('status' =>'error','request_type' => 'create_account', 'msg' => "User doesn't create!" ,'error_code' => 5), 404);
+                return $this->response(array('status' =>'error','request_type' => 'create_account', 'msg' => "User doesn't create!" ,'error_code' => "5"), 404);
             }
+        }
+        
+        //check if email id already exists or not
+        function user_email_check_post(){
+            if(!$this->post('email')){
+    			return $this->response(array('status' => 'error','msg' => 'Required fields missing in your request','error_code' => "1"), 404);
+    		}
+            $email = $this->post('email');
+            
+            if(!empty($email)) {
+                  //Email check if already exists or not
+                  $email_res = $this->user_model->check_unique(array("email" => $email));
+                  if(count($email_res)>0) {
+                    return $this->response(array('status' => "error",'msg' => 'Email already exists.','error_code' => "2"), 404);
+                  }
+             }
+             
+            return $this->response(array('status' => "success"), 200);
         }
         
         //user email update
         function user_email_update_post() {
             
             if(!$this->post('user_id') && !$this->post('email')){
-    			return $this->response(array('status' => 'error','msg' => 'Required fields missing in your request','error_code' => 1), 404);
+    			return $this->response(array('status' => 'error','msg' => 'Required fields missing in your request','error_code' => "1"), 404);
     		}
              
             $email          = $this->post('email');
@@ -97,7 +115,7 @@ class Service extends REST_Controller
                   //Email check if already exists or not
                   $email_res = $this->user_model->check_unique(array("email" => $email, 'id!=' => $user_id));
                   if(count($email_res)>0) {
-                    return $this->response(array('status' => "error",'msg' => 'Email already exist.','error_code' => 2), 404);
+                    return $this->response(array('status' => "error",'msg' => 'Email already exist.','error_code' => "2"), 404);
                   }
              } 
             
@@ -110,7 +128,7 @@ class Service extends REST_Controller
             }
             else
             {
-                return $this->response(array('status' =>'error','request_type' => 'update_email', 'msg' => 'Email not updated', 'error_code' => 3), 404);
+                return $this->response(array('status' =>'error','request_type' => 'update_email', 'msg' => 'Email not updated', 'error_code' => "3"), 404);
             } 
         }
         
@@ -118,7 +136,7 @@ class Service extends REST_Controller
         function login_post()
         {
             if(!$this->post('username') & !$this->post('password') & !$this->post('devicetoken')){
-    			return $this->response(array('status' => 'error','msg' => 'Required fields missing in your request','error_code' => 1), 404);
+    			return $this->response(array('status' => 'error','msg' => 'Required fields missing in your request','error_code' => "1"), 404);
     		}
             
             $username       = $this->post('username');
@@ -134,7 +152,7 @@ class Service extends REST_Controller
             }
             else
             {
-                return $this->response(array('status' =>'error','request_type' => 'user_login', 'msg' => 'Invalid credentials', 'error_code' => 4), 404);
+                return $this->response(array('status' =>'error','request_type' => 'user_login', 'msg' => 'Invalid credentials', 'error_code' => "4"), 404);
             }
         }
         
@@ -142,7 +160,7 @@ class Service extends REST_Controller
         function user_authentication_update_post()
         {
             if(!$this->post('user_id')){
-    			return $this->response(array('status' => 'error','msg' => 'Required fields missing in your request','error_code' => 1), 404);
+    			return $this->response(array('status' => 'error','msg' => 'Required fields missing in your request','error_code' => "1"), 404);
     		}
             
             $username  = $this->post('username');
@@ -162,7 +180,7 @@ class Service extends REST_Controller
             }
             else
             {
-                return $this->response(array('status' =>'error','request_type' => 'user_authenticate_update', 'msg' => 'Invalid User!', 'error_code' => 6), 404);
+                return $this->response(array('status' =>'error','request_type' => 'user_authenticate_update', 'msg' => 'Invalid User!', 'error_code' => "6"), 404);
             }
         }
         
@@ -170,7 +188,7 @@ class Service extends REST_Controller
         function user_address_post()
         {
             if(!$this->post('user_id')){
-    			return $this->response(array('status' => 'error','msg' => 'Required fields missing in your request','error_code' => 1), 404);
+    			return $this->response(array('status' => 'error','msg' => 'Required fields missing in your request','error_code' => "1"), 404);
     		} 
             
             $address1       = $this->post('address1');
@@ -193,7 +211,7 @@ class Service extends REST_Controller
             }    
             else
             {
-                return $this->response(array('status' =>'error','request_type' => 'user_address_create', 'msg' => "Address doesn't create!" ,'error_code' => 5), 404);
+                return $this->response(array('status' =>'error','request_type' => 'user_address_create', 'msg' => "Address doesn't create!" ,'error_code' => "5"), 404);
             }
         } 
         
@@ -201,7 +219,7 @@ class Service extends REST_Controller
         function get_user_email_post()
         {
             if(!$this->post('user_id')){
-    			return $this->response(array('status' => 'error','msg' => 'Required fields missing in your request','error_code' => 1), 404);
+    			return $this->response(array('status' => 'error','msg' => 'Required fields missing in your request','error_code' => "1"), 404);
     		}
             
             $user_id   = $this->post('user_id');
@@ -212,7 +230,7 @@ class Service extends REST_Controller
             }
             else
             {
-                return $this->response(array('status' =>'error','request_type' => 'get_user_email', 'msg' => "User doesn't exists!" ,'error_code' => 6), 404);
+                return $this->response(array('status' =>'error','request_type' => 'get_user_email', 'msg' => "User doesn't exists!" ,'error_code' => "6"), 404);
             }
         }
         
@@ -220,7 +238,7 @@ class Service extends REST_Controller
         function get_username_post()
         {
             if(!$this->post('user_id')){
-    			return $this->response(array('status' => 'error','msg' => 'Required fields missing in your request','error_code' => 1), 404);
+    			return $this->response(array('status' => 'error','msg' => 'Required fields missing in your request','error_code' => "1"), 404);
     		}
             
             $user_id   = $this->post('user_id');
@@ -231,7 +249,7 @@ class Service extends REST_Controller
             }
             else
             {
-                return $this->response(array('status' =>'error','request_type' => 'get_username', 'msg' => "User doesn't exists!" ,'error_code' => 6), 404);
+                return $this->response(array('status' =>'error','request_type' => 'get_username', 'msg' => "User doesn't exists!" ,'error_code' => "6"), 404);
             }
         }
         
@@ -239,7 +257,7 @@ class Service extends REST_Controller
         function add_credit_card_post()
         {
             if(!$this->post('name')){
-    			return $this->response(array('status' => 'error','msg' => 'Required fields missing in your request','error_code' => 1), 404);
+    			return $this->response(array('status' => 'error','msg' => 'Required fields missing in your request','error_code' => "1"), 404);
     		} 
             
             $name           = $this->post('name');
@@ -259,7 +277,7 @@ class Service extends REST_Controller
                   //Card number check if already exists or not
                   $card_res = $this->credit_card_model->check_unique(array("card_number" => $card_number));
                   if(count($card_res)>0) {
-                    return $this->response(array('status' => "error",'msg' => 'Card number already exists.','error_code' => 2), 404);
+                    return $this->response(array('status' => "error",'msg' => 'Card number already exists.','error_code' => "2"), 404);
                   }
              }
             
@@ -283,7 +301,7 @@ class Service extends REST_Controller
             }    
             else
             {
-                return $this->response(array('status' =>'error','request_type' => 'add_credit_card', 'msg' => "Card details doesn't create!" ,'error_code' => 5), 404);
+                return $this->response(array('status' =>'error','request_type' => 'add_credit_card', 'msg' => "Card details doesn't create!" ,'error_code' => "5"), 404);
             }
         }
         
@@ -291,7 +309,7 @@ class Service extends REST_Controller
         function credit_card_update_post() {
             
             if(!$this->post('card_id') && !$this->post('card_number')){
-    			return $this->response(array('status' => 'error','msg' => 'Required fields missing in your request','error_code' => 1), 404);
+    			return $this->response(array('status' => 'error','msg' => 'Required fields missing in your request','error_code' => "1"), 404);
     		}
              
                 $name           = $this->post('name');
@@ -329,7 +347,7 @@ class Service extends REST_Controller
                   //Card number check if already exists or not
                   $card_res = $this->credit_card_model->check_unique(array("card_number" => $card_number, 'id!=' => $card_id));
                   if(count($card_res)>0) {
-                    return $this->response(array('status' => "error",'msg' => 'Card number already exist.','error_code' => 2), 404);
+                    return $this->response(array('status' => "error",'msg' => 'Card number already exist.','error_code' => "2"), 404);
                   }
              } 
             $ins_data['updated_date'] = date("Y-m-d H:i:s");
@@ -341,7 +359,7 @@ class Service extends REST_Controller
             }
             else
             {
-                return $this->response(array('status' =>'error','request_type' => 'update_credit_card_details', 'msg' => "Credit Cart doesn't updated", 'error_code' => 3), 404);
+                return $this->response(array('status' =>'error','request_type' => 'update_credit_card_details', 'msg' => "Credit Cart doesn't updated", 'error_code' => "3"), 404);
             } 
         }
         
@@ -349,7 +367,7 @@ class Service extends REST_Controller
         function view_credit_card_post()
         {
             if(!$this->post('card_id')){
-    			return $this->response(array('status' => 'error','msg' => 'Required fields missing in your request','error_code' => 1), 404);
+    			return $this->response(array('status' => 'error','msg' => 'Required fields missing in your request','error_code' => "1"), 404);
     		}
             
             $card_id   = $this->post('card_id');
@@ -362,7 +380,7 @@ class Service extends REST_Controller
             }
             else
             {
-                return $this->response(array('status' =>'error','request_type' => 'view_credit_card_details', 'msg' => "Card doesn't exists!" ,'error_code' => 6), 404);
+                return $this->response(array('status' =>'error','request_type' => 'view_credit_card_details', 'msg' => "Card doesn't exists!" ,'error_code' => "6"), 404);
             }
         } 
         
@@ -371,7 +389,7 @@ class Service extends REST_Controller
         function delete_credit_card_post()
         {
             if(!$this->post('card_id')){
-    			return $this->response(array('status' => 'error','msg' => 'Required fields missing in your request','error_code' => 1), 404);
+    			return $this->response(array('status' => 'error','msg' => 'Required fields missing in your request','error_code' => "1"), 404);
     		}
             
             $card_id   = $this->post('card_id');
@@ -384,7 +402,7 @@ class Service extends REST_Controller
         function lists_employer_cards_post()
         {
             if(!$this->post('employer_id')){
-    			return $this->response(array('status' => 'error','msg' => 'Required fields missing in your request','error_code' => 1), 404);
+    			return $this->response(array('status' => 'error','msg' => 'Required fields missing in your request','error_code' => "1"), 404);
     		}
             
             $employer_id= $this->post('employer_id');
@@ -398,7 +416,7 @@ class Service extends REST_Controller
             }
             else
             {
-                return $this->response(array('status' =>'error','request_type' => 'employer_card_lists', 'msg' => "No Cards Found!" ,'error_code' => 7), 404);
+                return $this->response(array('status' =>'error','request_type' => 'employer_card_lists', 'msg' => "No Cards Found!" ,'error_code' => "7"), 404);
             }
         }
         
@@ -406,7 +424,7 @@ class Service extends REST_Controller
         function update_profile_image_post()
         {
             if(!$this->post('user_id')){
-    			return $this->response(array('status' => 'error','msg' => 'Required fields missing in your request','error_code' => 1), 404);
+    			return $this->response(array('status' => 'error','msg' => 'Required fields missing in your request','error_code' => "1"), 404);
     		}
             
             $profile_image = $this->post('profile_image');
@@ -423,7 +441,7 @@ class Service extends REST_Controller
             }
             else
             {
-                return $this->response(array('status' =>'error','request_type' => 'update_profile_section', 'msg' => "Profile image doesn't update" ,'error_code' => 7), 404);
+                return $this->response(array('status' =>'error','request_type' => 'update_profile_section', 'msg' => "Profile image doesn't update" ,'error_code' => "7"), 404);
             }
         }
         
@@ -431,7 +449,7 @@ class Service extends REST_Controller
         function add_checking_account_post()
         {
             if(!$this->post('name')){
-    			return $this->response(array('status' => 'error','msg' => 'Required fields missing in your request','error_code' => 1), 404);
+    			return $this->response(array('status' => 'error','msg' => 'Required fields missing in your request','error_code' => "1"), 404);
     		} 
             
             $name           = $this->post('name');
@@ -448,7 +466,7 @@ class Service extends REST_Controller
                   //Account number check if already exists or not
                   $account_res = $this->checking_account_model->check_unique(array("account_number" => $account_number));
                   if(count($account_res)>0) {
-                    return $this->response(array('status' => "error",'msg' => 'Account number already exists.','error_code' => 2), 404);
+                    return $this->response(array('status' => "error",'msg' => 'Account number already exists.','error_code' => "2"), 404);
                   }
              }
             
@@ -469,7 +487,7 @@ class Service extends REST_Controller
             }    
             else
             {
-                return $this->response(array('status' =>'error','request_type' => 'add_checking_account', 'msg' => "Checking Account details doesn't create!" ,'error_code' => 5), 404);
+                return $this->response(array('status' =>'error','request_type' => 'add_checking_account', 'msg' => "Checking Account details doesn't create!" ,'error_code' => "5"), 404);
             }
         }
         
@@ -477,7 +495,7 @@ class Service extends REST_Controller
         function checking_account_update_post() {
             
                 if(!$this->post('checking_account_id') && !$this->post('account_number')){
-        			return $this->response(array('status' => 'error','msg' => 'Required fields missing in your request','error_code' => 1), 404);
+        			return $this->response(array('status' => 'error','msg' => 'Required fields missing in your request','error_code' => "1"), 404);
         		}
                  
                 $name           = $this->post('name');
@@ -509,7 +527,7 @@ class Service extends REST_Controller
                   //Account number check if already exists or not
                   $acc_res = $this->checking_account_model->check_unique(array("account_number" => $account_number, 'id!=' => $check_accot_id));
                   if(count($acc_res)>0) {
-                    return $this->response(array('status' => "error",'msg' => 'Account number already exist.','error_code' => 2), 404);
+                    return $this->response(array('status' => "error",'msg' => 'Account number already exist.','error_code' => "2"), 404);
                   }
              } 
             $ins_data['updated_date']   = date("Y-m-d H:i:s");
@@ -521,7 +539,7 @@ class Service extends REST_Controller
             }
             else
             {
-                return $this->response(array('status' =>'error','request_type' => 'update_credit_card_details', 'msg' => "Account doesn't updated", 'error_code' => 3), 404);
+                return $this->response(array('status' =>'error','request_type' => 'update_credit_card_details', 'msg' => "Account doesn't updated", 'error_code' => "3"), 404);
             } 
         }
         
@@ -529,7 +547,7 @@ class Service extends REST_Controller
         function view_checking_account_post()
         {
             if(!$this->post('checking_account_id')){
-    			return $this->response(array('status' => 'error','msg' => 'Required fields missing in your request','error_code' => 1), 404);
+    			return $this->response(array('status' => 'error','msg' => 'Required fields missing in your request','error_code' => "1"), 404);
     		}
             $checking_account_id   = $this->post('checking_account_id');
             
@@ -541,7 +559,7 @@ class Service extends REST_Controller
             }
             else
             {
-                return $this->response(array('status' =>'error','request_type' => 'view_checking_account', 'msg' => "Checking Account doesn't exists!" ,'error_code' => 6), 404);
+                return $this->response(array('status' =>'error','request_type' => 'view_checking_account', 'msg' => "Checking Account doesn't exists!" ,'error_code' => "6"), 404);
             }
         } 
         
@@ -549,7 +567,7 @@ class Service extends REST_Controller
         function delete_checking_account_post()
         {
             if(!$this->post('checking_account_id')){
-    			return $this->response(array('status' => 'error','msg' => 'Required fields missing in your request','error_code' => 1), 404);
+    			return $this->response(array('status' => 'error','msg' => 'Required fields missing in your request','error_code' => "1"), 404);
     		}
             
             $checking_account_id   = $this->post('checking_account_id');
