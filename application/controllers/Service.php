@@ -19,7 +19,7 @@ class Service extends REST_Controller
             // Construct our parent class
             parent::__construct();
 
-            $this->load->model(array("user_model","login_model","address_model","credit_card_model"));
+            $this->load->model(array("user_model","login_model","address_model","credit_card_model","checking_account_model"));
             $key  = $this->get('X-APP-KEY');
         }
         
