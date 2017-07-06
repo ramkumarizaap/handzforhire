@@ -18,9 +18,11 @@ class Service extends REST_Controller
         {
             // Construct our parent class
             parent::__construct();
-
-            $this->load->model(array("user_model","login_model","address_model","credit_card_model","checking_account_model"));
+            
             $key  = $this->get('X-APP-KEY');
+            
+            $this->load->model(array("user_model","login_model","address_model","credit_card_model","checking_account_model","paypal_model"));
+            
         }
         
          //register
@@ -138,14 +140,15 @@ class Service extends REST_Controller
             if(!$this->post('username') & !$this->post('password') & !$this->post('devicetoken')){
     			return $this->response(array('status' => 'error','msg' => 'Required fields missing in your request','error_code' => "1"), 404);
     		}
-            
-            $username       = $this->post('username');
+      
+            $username       = $this->post('username'); 
             $password       = $this->post('password');
             $devicetoken    = $this->post('devicetoken');
+            $type           = $this->post("type");
             
-            $result = $this->login_model->app_login($username,$password);
-            
-            if(count($result)>0){
+            $result = $this->login_model->app_login($username,$password,$type);
+           //print_r($result);exit;
+            if(!empty($result)){
                 //update user device token
                 $device_token_update = $this->user_model->update(array("id" => $result['id']),array("devicetoken" => $devicetoken),"user");
                 return $this->response(array('status' =>'success','request_type' => 'user_login','user_data' => $result), 200);
@@ -343,6 +346,12 @@ class Service extends REST_Controller
                 $ins_data['employer_id'] = (!empty($employer_id))?$employer_id:$cd_res['employer_id'];
                 $ins_data['default_card']= (!empty($default_card))?$default_card:$cd_res['default_card'];
            
+            $card_res = $this->credit_card_model->check_unique(array('id' => $card_id));
+          
+            if(count($card_res)==0){
+                return $this->response(array('status' =>'error','request_type' => 'update_credit_card_details', 'msg' => "Credit Cart doesn't exists", 'error_code' => "3"), 404);
+            } 
+            
              if(!empty($card_number)) {
                   //Card number check if already exists or not
                   $card_res = $this->credit_card_model->check_unique(array("card_number" => $card_number, 'id!=' => $card_id));
@@ -350,6 +359,7 @@ class Service extends REST_Controller
                     return $this->response(array('status' => "error",'msg' => 'Card number already exist.','error_code' => "2"), 404);
                   }
              } 
+              
             $ins_data['updated_date'] = date("Y-m-d H:i:s");
             $affected                 = $this->credit_card_model->update(array("id" => $card_id),$ins_data);
             
@@ -357,10 +367,7 @@ class Service extends REST_Controller
                 $res = $this->credit_card_model->check_unique(array('id' => $card_id));
                 return $this->response(array('status' =>'success','request_type' => 'update_credit_card_details','user_data' => $res), 200);
             }
-            else
-            {
-                return $this->response(array('status' =>'error','request_type' => 'update_credit_card_details', 'msg' => "Credit Cart doesn't updated", 'error_code' => "3"), 404);
-            } 
+            
         }
         
          //view credit card details
@@ -411,7 +418,7 @@ class Service extends REST_Controller
             $card_res   = $this->credit_card_model->get_employer_cards(array('c.employer_id' => $employer_id));
             $check_res  = $this->checking_account_model->get_checking_account_data(array('c.employer_id' => $employer_id));
             
-            if(count($card_res)>0){
+            if((count($card_res)>0) || (count($check_res)>0)){
                  return $this->response(array('status' =>'success','request_type' => 'employer_card_lists', 'card_data' => $card_res, 'checking_account_data' => $check_res), 200);
             }
             else
@@ -574,5 +581,70 @@ class Service extends REST_Controller
             $res                   = $this->checking_account_model->delete(array('id' => $checking_account_id));
             return $this->response(array('status' =>'success','request_type' => 'delete_checking_account', 'card_id' => $checking_account_id), 200);
         } 
+        
+        //get profile image & profile name  
+        function get_profile_image_post()
+        {
+            if(!$this->post('user_id')){
+    			return $this->response(array('status' => 'error','msg' => 'Required fields missing in your request','error_code' => "1"), 404);
+    		}
+            
+            $user_id       = $this->post("user_id"); 
+            $res           = $this->user_model->check_unique(array('id' => $user_id));
+            
+            if(count($res)>0){
+                 $profile_image = site_url()."assets/images/uploads/profile/".$res['profile_image'];
+                 return $this->response(array('status' =>'success','request_type' => 'get_profile_image_and_name', "profile_name" => $res['profile_name'], "profile_image" => $profile_image ), 200);
+            }
+            else
+            {
+                return $this->response(array('status' =>'error','request_type' => 'get_profile_image_and_name', 'msg' => "Doesn't found user!" ,'error_code' => "7"), 404);
+            }
+        }
+        
+        //save payment information
+        function save_payment_information_post()
+        {
+            if(!$this->post('user_id')){
+    			return $this->response(array('status' => 'error','msg' => 'Required fields missing in your request','error_code' => "1"), 404);
+    		}
+            
+            $user_id       = $this->post("user_id"); 
+            
+            $ins_data             = array();
+            $ins_data['employer_id']= $user_id;
+            $ins_data['email_id']   = $this->post('email');
+            $ins_data['password']   = $this->post('password');
+            $res                    = $this->paypal_model->insert($ins_data,'paypal');
+            
+            if(count($res)>0){
+                 return $this->response(array('status' =>'success','request_type' => 'save_paypal_info' ), 200);
+            }
+            else
+            {
+                return $this->response(array('status' =>'error','request_type' => 'save_paypal_info', 'msg' => "Doesn't save paypal info!" ,'error_code' => "8"), 404);
+            }
+        }
+        
+        //get payment information
+        function check_if_payment_mode_post()
+        {
+            if(!$this->post('user_id')){
+    			return $this->response(array('status' => 'error','msg' => 'Required fields missing in your request','error_code' => "1"), 404);
+    		}
+            
+            $user_id        = $this->post("user_id"); 
+            $check_account  = $this->checking_account_model->check_unique(array('employer_id' => $user_id));
+            $credit_account = $this->credit_card_model->check_unique(array('employer_id' => $user_id));
+            $paypal         = $this->paypal_model->check_unique(array('employer_id' => $user_id));
+            
+            if((count($check_account)>0) || (count($credit_account)>0) || (count($paypal)>0)){
+                 return $this->response(array('status' =>'success','request_type' => 'save_paypal_info', "payment" => 'yes' ), 200);
+            }
+            else
+            {
+                return $this->response(array('status' =>'error','request_type' => 'save_paypal_info', "payment" => "no" ,'error_code' => "9"), 404);
+            }
+        }
 }
 ?>

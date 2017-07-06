@@ -18,6 +18,7 @@ class Checking_account_model extends CI_model {
    {
     $this->db->where($where);
     $this->db->update($this->_table ,$data);
+    return $this->db->affected_rows();
    }
 
   public function delete($where)

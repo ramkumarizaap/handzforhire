@@ -80,5 +80,7 @@ class User_model extends App_model
         $this->db->where($where);
         return $this->db->get("user")->row_array();
     }
+    
+    
 }
 ?>
